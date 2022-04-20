@@ -42,6 +42,20 @@ const userController = {
   },
 
   // update a user by its _id
+  updateUser({ params, body }, res) {
+    User.findOneAndUpdate({ _id: params.id }, body, { new: true })
+      .then((singleUserData) => {
+        if (!singleUserData) {
+          res
+            .status(404)
+            .json({ message: "The User you are looking for does not exist." });
+          return;
+        }
+        res.json(singleUserData);
+      })
+      .catch((err) => res.status(400).json(err));
+  },
+
   // remove a user by its _id
 };
 
