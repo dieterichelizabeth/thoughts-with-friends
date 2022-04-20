@@ -17,3 +17,4 @@ match: RegExp, creates a validator that checks if the value matches the given re
 - [Mongoose String Validators](https://mongoosejs.com/docs/schematypes.html#string-validators)
 - [Mongoose ObjectIds Type](https://mongoosejs.com/docs/schematypes.html#objectids)
 - [Mongoose Builtin Validators](https://mongoosejs.com/docs/validation.html#built-in-validators)
+- [Mongoose Queries](https://mongoosejs.com/docs/queries.html)
