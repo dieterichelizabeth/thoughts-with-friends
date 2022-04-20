@@ -1,5 +1,5 @@
 // Import Thought models
-const { Thought } = require("../models");
+const { Thought, User } = require("../models");
 
 // Create model methods
 const thoughtController = {
@@ -8,7 +8,7 @@ const thoughtController = {
     Thought.find({})
       .select("-__v")
       .sort({ _id: -1 })
-      .then((allThoughtData) => res.json(allThoughtData))
+      .then((allThoughts) => res.json(allThoughts))
       .catch((err) => {
         console.log(err);
         res.status(400).json(err);
@@ -19,14 +19,14 @@ const thoughtController = {
   getThoughtById({ params }, res) {
     Thought.findOne({ _id: params.id })
       .select("-__v")
-      .then((singleThoughtData) => {
-        if (!singleThoughtData) {
+      .then((singleThought) => {
+        if (!singleThought) {
           res.status(404).json({
             message: "The Thought you are looking for does not exist.",
           });
           return;
         }
-        res.json(singleThoughtData);
+        res.json(singleThought);
       })
       .catch((err) => {
         console.log(err);
@@ -36,38 +36,63 @@ const thoughtController = {
 
   // Create a new Thought
   // Expects: { "thoughtText": "This is my first thought.", "username": "Test" }
-  createThought({ body }, res) {
+  createThought({ params, body }, res) {
     Thought.create(body)
-      .then((singleThoughtData) => res.json(singleThoughtData))
-      .catch((err) => res.status(400).json(err));
+      .then(({ _id }) => {
+        return User.findOneAndUpdate(
+          { _id: params.userId },
+          { $push: { thoughts: _id } },
+          { new: true }
+        );
+      })
+      .then((singleUser) => {
+        if (!singleUser) {
+          res.status(404).json({ message: "There is no User for this id." });
+        }
+        res.json(singleUser);
+      })
+      .catch((err) => res.json(err));
   },
 
   // Update a Thought by id
   // Expects(example): { "thoughtText": "First thought!" }
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
-      .then((singleThoughtData) => {
-        if (!singleThoughtData) {
+      .then((updatedThought) => {
+        if (!updatedThought) {
           res.status(404).json({
             message: "The Thought you are looking for does not exist.",
           });
           return;
         }
-        res.json(singleThoughtData);
+        res.json(updatedThought);
       })
       .catch((err) => res.status(400).json(err));
   },
-  // Removve a Thought by id
+
+  // Remove a Thought by id
   deleteThought({ params }, res) {
-    Thought.findOneAndDelete({ _id: params.id })
-      .then((singleThoughtData) => {
-        if (!singleThoughtData) {
+    Thought.findOneAndDelete({ _id: params.thoughtId })
+      .then((deletedThought) => {
+        if (!deletedThought) {
           res.status(404).json({
             message: "The Thought you are looking for does not exist.",
           });
+        }
+        return User.findOneAndUpdate(
+          { _id: params.userId },
+          { $pull: { thoughts: params.thoughtId } },
+          { new: true }
+        );
+      })
+      .then((singleUserData) => {
+        if (!singleUserData) {
+          res
+            .status(404)
+            .json({ message: "The User you are looking for does not exist." });
           return;
         }
-        res.json(singleThoughtData);
+        res.json(singleUserData);
       })
       .catch((err) => res.status(400).json(err));
   },
