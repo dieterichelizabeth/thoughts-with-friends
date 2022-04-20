@@ -42,7 +42,7 @@ const thoughtController = {
       .catch((err) => res.status(400).json(err));
   },
 
-  // update a thought by its _id
+  // Update a Thought by id
   // Expects(example): { "thoughtText": "First thought!" }
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
@@ -57,7 +57,20 @@ const thoughtController = {
       })
       .catch((err) => res.status(400).json(err));
   },
-  // remove a thought by its _id
+  // Removve a Thought by id
+  deleteThought({ params }, res) {
+    Thought.findOneAndDelete({ _id: params.id })
+      .then((singleThoughtData) => {
+        if (!singleThoughtData) {
+          res.status(404).json({
+            message: "The Thought you are looking for does not exist.",
+          });
+          return;
+        }
+        res.json(singleThoughtData);
+      })
+      .catch((err) => res.status(400).json(err));
+  },
 };
 
 // Export the controller
