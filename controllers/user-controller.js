@@ -15,6 +15,25 @@ const userController = {
       });
   },
 
+  // get one User by id
+  getUserById({ params }, res) {
+    User.findOne({ _id: params.id })
+      .select("-__v")
+      .then((singleUserData) => {
+        if (!singleUserData) {
+          res
+            .status(404)
+            .json({ message: "The User you are looking for does not exist." });
+          return;
+        }
+        res.json(singleUserData);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).json(err);
+      });
+  },
+
   // create a new user
   createUser({ body }, res) {
     User.create(body)
