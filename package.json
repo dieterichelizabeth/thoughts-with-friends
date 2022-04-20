@@ -1,0 +1,23 @@
+{
+  "name": "thoughts-with-friends",
+  "version": "1.0.0",
+  "description": "A Social Networking API 🐻🦊🐼",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dieterichelizabeth/thoughts-with-friends.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dieterichelizabeth/thoughts-with-friends/issues"
+  },
+  "homepage": "https://github.com/dieterichelizabeth/thoughts-with-friends#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.3.0"
+  }
+}
