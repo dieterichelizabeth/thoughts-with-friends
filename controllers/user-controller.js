@@ -16,6 +16,12 @@ const userController = {
   },
 
   // create a new user
+  createUser({ body }, res) {
+    User.create(body)
+      .then((singleUserData) => res.json(singleUserData))
+      .catch((err) => res.status(400).json(err));
+  },
+
   // update a user by its _id
   // remove a user by its _id
 };

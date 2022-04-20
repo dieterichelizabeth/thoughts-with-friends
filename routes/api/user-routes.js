@@ -1,11 +1,10 @@
 const router = require("express").Router();
 
 // Import the User - Controller
-const { getAllUser } = require("../../controllers/user-controller");
+const { getAllUser, createUser } = require("../../controllers/user-controller");
 
-// Set up Routes
 // Route: /api/users
-router.route("/").get(getAllUser);
+router.route("/").get(getAllUser).post(createUser);
 
 // Export routes
 module.exports = router;
