@@ -3,7 +3,7 @@ const { User } = require("../models");
 
 // Create model methods
 const userController = {
-  // get all Users
+  // Get all Users
   getAllUser(req, res) {
     User.find({})
       .select("-__v")
@@ -15,7 +15,7 @@ const userController = {
       });
   },
 
-  // get one User by id
+  // Get one User by id
   getUserById({ params }, res) {
     User.findOne({ _id: params.id })
       .select("-__v")
@@ -34,14 +34,16 @@ const userController = {
       });
   },
 
-  // create a new user
+  // Create new User
+  // Expects: { "username": "Test", "email": "test@gmail.com" }
   createUser({ body }, res) {
     User.create(body)
       .then((singleUserData) => res.json(singleUserData))
       .catch((err) => res.status(400).json(err));
   },
 
-  // update a user by its _id
+  // Update one User by id
+  // Expects(example): { "email": "test@hotmail.com" }
   updateUser({ params, body }, res) {
     User.findOneAndUpdate({ _id: params.id }, body, { new: true })
       .then((singleUserData) => {
@@ -56,7 +58,20 @@ const userController = {
       .catch((err) => res.status(400).json(err));
   },
 
-  // remove a user by its _id
+  // Remove one User by id
+  deleteUser({ params }, res) {
+    User.findOneAndDelete({ _id: params.id })
+      .then((singleUserData) => {
+        if (!singleUserData) {
+          res
+            .status(404)
+            .json({ message: "The User you are looking for does not exist." });
+          return;
+        }
+        res.json(singleUserData);
+      })
+      .catch((err) => res.status(400).json(err));
+  },
 };
 
 // Export the controller
