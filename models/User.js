@@ -12,6 +12,10 @@ const UserSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      match: [
+        /[a-zA-z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+/,
+        "Invalid Email address, please try again",
+      ],
     },
     thoughts: [
       {

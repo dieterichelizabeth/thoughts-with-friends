@@ -18,3 +18,5 @@ match: RegExp, creates a validator that checks if the value matches the given re
 - [Mongoose ObjectIds Type](https://mongoosejs.com/docs/schematypes.html#objectids)
 - [Mongoose Builtin Validators](https://mongoosejs.com/docs/validation.html#built-in-validators)
 - [Mongoose Queries](https://mongoosejs.com/docs/queries.html)
+- [Mongoose String Schema Types](https://mongoosejs.com/docs/schematypes.html#strings)
+- [Email Regex](regexr.com/6k5r9)
