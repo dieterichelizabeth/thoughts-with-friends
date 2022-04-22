@@ -6,6 +6,10 @@ const thoughtController = {
   // Get all Thoughts
   getAllThought(req, res) {
     Thought.find({})
+      .populate({
+        path: "reactions",
+        select: "-__v",
+      })
       .select("-__v")
       .sort({ _id: -1 })
       .then((allThoughts) => res.json(allThoughts))
@@ -18,6 +22,10 @@ const thoughtController = {
   // Get one Thought by id
   getThoughtById({ params }, res) {
     Thought.findOne({ _id: params.id })
+      .populate({
+        path: "reactions",
+        select: "-__v",
+      })
       .select("-__v")
       .then((singleThought) => {
         if (!singleThought) {
@@ -50,6 +58,25 @@ const thoughtController = {
           res.status(404).json({ message: "There is no User for this id." });
         }
         res.json(singleUser);
+      })
+      .catch((err) => res.json(err));
+  },
+
+  // Create a new Reaction
+  createReaction({ params, body }, res) {
+    Thought.findOneAndUpdate(
+      { _id: params.thoughtId },
+      { $push: { reactions: body } },
+      { new: true }
+    )
+      .then((singleThought) => {
+        if (!singleThought) {
+          res.status(404).json({
+            message: "The Thought you are looking for does not exist.",
+          });
+          return;
+        }
+        res.json(singleThought);
       })
       .catch((err) => res.json(err));
   },
@@ -95,6 +122,17 @@ const thoughtController = {
         res.json(singleUserData);
       })
       .catch((err) => res.status(400).json(err));
+  },
+
+  // Remove a Reaction
+  removeReaction({ params }, res) {
+    Thought.findOneAndUpdate(
+      { _id: params.thoughtId },
+      { $pull: { reactions: { reactionId: params.reactionId } } },
+      { new: true }
+    )
+      .then((singleThought) => res.json(singleThought))
+      .catch((err) => res.json(err));
   },
 };
 
