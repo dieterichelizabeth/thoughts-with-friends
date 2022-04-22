@@ -5,10 +5,11 @@ const { User } = require("../models");
 const userController = {
   // Get all Users
   getAllUser(req, res) {
+    console.log("getting users");
     User.find({})
       .populate({
-        path: "thoughts",
-        select: "-__v",
+        path: ("thoughts", "friends"),
+        // select: "-__v",
       })
       .select("-__v")
       .sort({ _id: -1 })
@@ -50,6 +51,26 @@ const userController = {
       .catch((err) => res.status(400).json(err));
   },
 
+  // Add Friend to User's friend list
+  newFriend({ params }, res) {
+    console.log("Creating new friend");
+    User.findOneAndUpdate(
+      { _id: params.id },
+      { $push: { friends: params.friendId } },
+      { new: true }
+    )
+      .then((updatedUser) => {
+        if (!updatedUser) {
+          res.status(404).json({
+            message: "The User you are looking for does not exist.",
+          });
+          return;
+        }
+        res.json(updatedUser);
+      })
+      .catch((err) => res.json(err));
+  },
+
   // Update one User by id
   // Expects(example): { "email": "test@hotmail.com" }
   updateUser({ params, body }, res) {
@@ -79,6 +100,17 @@ const userController = {
         res.json(deletedUser);
       })
       .catch((err) => res.status(400).json(err));
+  },
+
+  // Remove Friend to User's friend list
+  deleteFriend({ params }, res) {
+    User.findOneAndUpdate(
+      { _id: params.userId },
+      { $pull: { friends: { friendId: params.friendId } } },
+      { new: true }
+    )
+      .then((updatedUser) => res.json(updatedUser))
+      .catch((err) => res.json(err));
   },
 };
 
