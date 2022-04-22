@@ -104,12 +104,21 @@ const userController = {
 
   // Remove Friend to User's friend list
   deleteFriend({ params }, res) {
+    console.log("Removing one friend");
     User.findOneAndUpdate(
-      { _id: params.userId },
-      { $pull: { friends: { friendId: params.friendId } } },
+      { _id: params.id },
+      { $pull: { friends: params.friendId } },
       { new: true }
     )
-      .then((updatedUser) => res.json(updatedUser))
+      .then((updatedUser) => {
+        if (!updatedUser) {
+          res.status(404).json({
+            message: "The User you are looking for does not exist.",
+          });
+          return;
+        }
+        res.json(updatedUser);
+      })
       .catch((err) => res.json(err));
   },
 };
