@@ -1,6 +1,4 @@
 const router = require("express").Router();
-
-// Import Routes
 const apiRoutes = require("./api");
 
 // Set Routes
@@ -11,5 +9,4 @@ router.use((req, res) => {
   res.status(404).end();
 });
 
-// Export Routes
 module.exports = router;

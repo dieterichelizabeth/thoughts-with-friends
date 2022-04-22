@@ -1,4 +1,3 @@
-// Import Mongoose
 const { Schema, model, Types } = require("mongoose");
 
 const ReactionSchema = new Schema(
@@ -58,5 +57,4 @@ const ThoughtSchema = new Schema(
 // Define the Thought Model
 const Thought = model("Thought", ThoughtSchema);
 
-// Export Model
 module.exports = Thought;

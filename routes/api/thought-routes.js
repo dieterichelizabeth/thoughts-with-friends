@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const { get } = require("express/lib/request");
-// Import the Thought - Controller
+
 const {
   getAllThought,
   createThought,
@@ -27,5 +27,4 @@ router.route("/:userId/:thoughtId").put(createReaction).delete(deleteThought);
 // Route: /api/thoughts/<userId>/<thoughtId>/<reactionID>
 router.route("/:userId/:thoughtId/:reactionId").delete(removeReaction);
 
-// Export routes
 module.exports = router;

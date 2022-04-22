@@ -1,15 +1,12 @@
-// Import User models
 const { User } = require("../models");
 
-// Create model methods
 const userController = {
   // Get all Users
   getAllUser(req, res) {
-    console.log("getting users");
     User.find({})
       .populate({
         path: ("thoughts", "friends"),
-        // select: "-__v",
+        select: "-__v",
       })
       .select("-__v")
       .sort({ _id: -1 })
@@ -20,7 +17,7 @@ const userController = {
       });
   },
 
-  // Get one User by id
+  // Get One User by id
   getUserById({ params }, res) {
     User.findOne({ _id: params.id })
       .populate({
@@ -49,26 +46,6 @@ const userController = {
     User.create(body)
       .then((newUser) => res.json(newUser))
       .catch((err) => res.status(400).json(err));
-  },
-
-  // Add Friend to User's friend list
-  newFriend({ params }, res) {
-    console.log("Creating new friend");
-    User.findOneAndUpdate(
-      { _id: params.id },
-      { $push: { friends: params.friendId } },
-      { new: true }
-    )
-      .then((updatedUser) => {
-        if (!updatedUser) {
-          res.status(404).json({
-            message: "The User you are looking for does not exist.",
-          });
-          return;
-        }
-        res.json(updatedUser);
-      })
-      .catch((err) => res.json(err));
   },
 
   // Update one User by id
@@ -102,11 +79,31 @@ const userController = {
       .catch((err) => res.status(400).json(err));
   },
 
+  // ADD AND REMOVE FRIENDS --------- //
+
+  // Add Friend to User's friend list
+  newFriend({ params }, res) {
+    User.findOneAndUpdate(
+      { _id: params.userId },
+      { $push: { friends: params.friendId } },
+      { new: true }
+    )
+      .then((updatedUser) => {
+        if (!updatedUser) {
+          res.status(404).json({
+            message: "The User you are looking for does not exist.",
+          });
+          return;
+        }
+        res.json(updatedUser);
+      })
+      .catch((err) => res.json(err));
+  },
+
   // Remove Friend to User's friend list
   deleteFriend({ params }, res) {
-    console.log("Removing one friend");
     User.findOneAndUpdate(
-      { _id: params.id },
+      { _id: params.userId },
       { $pull: { friends: params.friendId } },
       { new: true }
     )
@@ -123,5 +120,4 @@ const userController = {
   },
 };
 
-// Export the controller
 module.exports = userController;

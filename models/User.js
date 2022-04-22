@@ -1,7 +1,5 @@
-// Import Mongoose
 const { Schema, model, Types } = require("mongoose");
 
-// Create the User Schema
 const UserSchema = new Schema(
   {
     username: {
@@ -40,5 +38,4 @@ const UserSchema = new Schema(
 // Define the User Model
 const User = model("User", UserSchema);
 
-// Export Model
 module.exports = User;

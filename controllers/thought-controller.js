@@ -1,7 +1,5 @@
-// Import Thought models
 const { Thought, User } = require("../models");
 
-// Create model methods
 const thoughtController = {
   // Get all Thoughts
   getAllThought(req, res) {
@@ -53,36 +51,17 @@ const thoughtController = {
           { new: true }
         );
       })
-      .then((singleUser) => {
-        if (!singleUser) {
+      .then((updatedUser) => {
+        if (!updatedUser) {
           res.status(404).json({ message: "There is no User for this id." });
         }
-        res.json(singleUser);
-      })
-      .catch((err) => res.json(err));
-  },
-
-  // Create a new Reaction
-  createReaction({ params, body }, res) {
-    Thought.findOneAndUpdate(
-      { _id: params.thoughtId },
-      { $push: { reactions: body } },
-      { new: true }
-    )
-      .then((singleThought) => {
-        if (!singleThought) {
-          res.status(404).json({
-            message: "The Thought you are looking for does not exist.",
-          });
-          return;
-        }
-        res.json(singleThought);
+        res.json(updatedUser);
       })
       .catch((err) => res.json(err));
   },
 
   // Update a Thought by id
-  // Expects(example): { "thoughtText": "First thought!" }
+  // Expects: { "thoughtText": "First thought!" }
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
       .then((updatedThought) => {
@@ -112,16 +91,37 @@ const thoughtController = {
           { new: true }
         );
       })
-      .then((singleUserData) => {
-        if (!singleUserData) {
+      .then((updatedUser) => {
+        if (!updatedUser) {
           res
             .status(404)
             .json({ message: "The User you are looking for does not exist." });
           return;
         }
-        res.json(singleUserData);
+        res.json(updatedUser);
       })
       .catch((err) => res.status(400).json(err));
+  },
+
+  // ADD AND REMOVE REACTIONS --------- //
+
+  // Create a new Reaction
+  createReaction({ params, body }, res) {
+    Thought.findOneAndUpdate(
+      { _id: params.thoughtId },
+      { $push: { reactions: body } },
+      { new: true }
+    )
+      .then((updatedThought) => {
+        if (!updatedThought) {
+          res.status(404).json({
+            message: "The Thought you are looking for does not exist.",
+          });
+          return;
+        }
+        res.json(updatedThought);
+      })
+      .catch((err) => res.json(err));
   },
 
   // Remove a Reaction
@@ -131,10 +131,9 @@ const thoughtController = {
       { $pull: { reactions: { reactionId: params.reactionId } } },
       { new: true }
     )
-      .then((singleThought) => res.json(singleThought))
+      .then((updatedThought) => res.json(updatedThought))
       .catch((err) => res.json(err));
   },
 };
 
-// Export the controller
 module.exports = thoughtController;
