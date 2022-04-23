@@ -103,7 +103,7 @@ const thoughtController = {
       .catch((err) => res.status(400).json(err));
   },
 
-  // ADD AND REMOVE REACTIONS --------- //
+  // -------- ADD AND REMOVE REACTIONS --------- //
 
   // Create a new Reaction
   createReaction({ params, body }, res) {

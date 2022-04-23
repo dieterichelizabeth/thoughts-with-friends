@@ -79,7 +79,7 @@ const userController = {
       .catch((err) => res.status(400).json(err));
   },
 
-  // ADD AND REMOVE FRIENDS --------- //
+  // -------- ADD AND REMOVE FRIENDS --------- //
 
   // Add Friend to User's friend list
   newFriend({ params }, res) {

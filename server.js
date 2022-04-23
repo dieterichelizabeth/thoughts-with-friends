@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 // Import routes
 app.use(require("./routes"));
 
-// Point Mongoose to the database we want to connect to
+// Point Mongoose to the database
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost:27017/thoughts-with-friends",
   {

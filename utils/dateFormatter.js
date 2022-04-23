@@ -1,4 +1,4 @@
-module.exports = (date = {}) => {
+module.exports = (date) => {
   let month = {
     0: "January",
     1: "February",

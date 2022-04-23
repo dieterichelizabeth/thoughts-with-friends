@@ -30,7 +30,6 @@ const ReactionSchema = new Schema(
   }
 );
 
-// Create the Thought Schema
 const ThoughtSchema = new Schema(
   {
     thoughtText: {
@@ -59,7 +58,7 @@ const ThoughtSchema = new Schema(
   }
 );
 
-// Get total amount of reactions for thought
+//  Get total # of reactions
 ThoughtSchema.virtual("reactionCount").get(function () {
   return this.reactions.length;
 });
