@@ -73,6 +73,6 @@ Test the routes in Insonmia or another Open Source API Client
 
 ---
 
-Made with ❤️ by Liz
+Made with ❤️
 
 © 2022 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
